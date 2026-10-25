@@ -16,3 +16,17 @@ export function formatTourDate(iso?: string): string {
     day: 'numeric',
   }).format(date);
 }
+
+/** Card line from the homepage design: «مهر ماه . ۳ روزه - اتوبوس». */
+export function tourCardMeta(startIso?: string, endIso?: string, fleet?: string): string {
+  if (!startIso) return '—';
+  const start = new Date(startIso);
+  if (Number.isNaN(start.getTime())) return '—';
+
+  const end = endIso ? new Date(endIso) : start;
+  const endTime = Number.isNaN(end.getTime()) ? start.getTime() : end.getTime();
+  const days = Math.max(1, Math.round((endTime - start.getTime()) / 86_400_000));
+  const month = new Intl.DateTimeFormat('fa-IR', { month: 'long' }).format(start);
+
+  return `${month} ماه . ${days.toLocaleString('fa-IR')} روزه - ${fleet || 'حمل‌ونقل'}`;
+}

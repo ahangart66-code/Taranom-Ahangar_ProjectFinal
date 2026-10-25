@@ -21,7 +21,7 @@ body {
 
 @layer components {
   .container-app {
-    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+    @apply mx-auto w-full max-w-[1440px] px-4 sm:px-8 xl:px-[126px];
   }
 
   .btn-primary {
@@ -40,4 +40,122 @@ body {
 
 .rmdp-input {
   width: 100% !important;
+}
+
+.search-date,
+.search-date .rmdp-input {
+  width: 100% !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  height: 40px;
+  padding: 0 !important;
+  font-family: inherit;
+  font-size: 16px;
+  color: #282828;
+}
+
+.search-date .rmdp-input::placeholder {
+  color: #282828;
+  opacity: 1;
+}
+
+/* Homepage date popup, matched to the Figma calendar */
+.torino-date.rmdp-wrapper {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+  font-family: var(--font-vazirmatn), Tahoma, sans-serif;
+  padding: 4px 2px 8px;
+}
+
+.torino-date .rmdp-calendar {
+  padding: 8px;
+}
+
+.torino-date .rmdp-header-values {
+  color: #282828;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.torino-date .rmdp-arrow {
+  border-color: #28a745;
+}
+
+.torino-date .rmdp-arrow-container {
+  width: 28px;
+  height: 28px;
+  margin: 0 4px;
+}
+
+.torino-date .rmdp-arrow-container:hover {
+  background-color: #e8f6ec;
+  box-shadow: none;
+}
+
+.torino-date .rmdp-arrow-container:hover .rmdp-arrow {
+  border-color: #1f7a4d;
+}
+
+.torino-date .rmdp-week-day {
+  color: #28a745;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.torino-date .rmdp-day,
+.torino-date .rmdp-week-day {
+  width: 36px;
+  height: 36px;
+  color: #282828;
+}
+
+.torino-date .rmdp-day span {
+  font-size: 14px;
+}
+
+.torino-date .rmdp-day.rmdp-deactive,
+.torino-date .rmdp-day.rmdp-disabled {
+  color: #c5c5c5;
+}
+
+.torino-date .rmdp-day.rmdp-today span {
+  background-color: transparent;
+  border: 1px solid #28a745;
+  color: #28a745;
+  box-shadow: none;
+}
+
+.torino-date .rmdp-day.rmdp-selected span:not(.highlight),
+.torino-date .rmdp-day.rmdp-range.start span,
+.torino-date .rmdp-day.rmdp-range.end span {
+  background-color: #28a745 !important;
+  box-shadow: none !important;
+  color: #fff !important;
+}
+
+.torino-date .rmdp-range {
+  background-color: #e5f6eb !important;
+  box-shadow: none !important;
+  color: #282828;
+}
+
+.torino-date .rmdp-range-hover {
+  background-color: #e5f6eb;
+  color: #282828;
+}
+
+.torino-date .rmdp-day.rmdp-range:not(.rmdp-selected) span {
+  background-color: transparent;
+  color: #282828;
+}
+
+.torino-date .rmdp-day:not(.rmdp-disabled, .rmdp-day-hidden) span:hover {
+  background-color: #28a745 !important;
+  color: #fff !important;
+}
+
+.rmdp-wrapper {
+  z-index: 80;
 }

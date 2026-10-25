@@ -1,7 +1,7 @@
 export default function Head() {
   return (
     <>
-      <title>Torino | تورینو</title>
+      <title>تورینو | تورگردی متمایز</title>
       <meta
         name="description"
         content="آژانس مسافرتی تورینو — رزرو تورهای داخلی و خارجی"

@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { cityLabel, fleetLabel } from '@/lib/cities';
-import { formatTourDate } from '@/lib/dates';
+import { fleetLabel } from '@/lib/cities';
+import { tourCardMeta } from '@/lib/dates';
 import type { Tour } from '@/types/tour';
 
 type TourCardProps = {
@@ -8,58 +8,38 @@ type TourCardProps = {
 };
 
 export function TourCard({ tour }: TourCardProps) {
+  const meta = tourCardMeta(tour.startDate, tour.endDate, fleetLabel(tour.fleetVehicle));
+
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-soft transition duration-300 hover:-translate-y-1 hover:border-brand/20 hover:shadow-md">
-      <div className="relative h-44 overflow-hidden bg-[#dcefe2]">
+    <article className="overflow-hidden rounded-[10px] border border-black/[0.12] bg-white shadow-[0_0_2px_rgba(0,0,0,0.25)]">
+      <div className="h-[159px] bg-[#e7f2ec]">
         {tour.image ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={tour.image}
-            alt={tour.title}
-            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-          />
+          <img src={tour.image} alt={tour.title} className="h-full w-full object-cover" />
         ) : (
-          <div className="flex h-full items-center justify-center text-sm font-medium text-brand">
-            Torino Tour
-          </div>
+          <div className="flex h-full items-center justify-center text-sm text-brand">تورینو</div>
         )}
-        <span className="absolute bottom-3 right-3 rounded-lg bg-white/90 px-2.5 py-1 text-xs font-medium text-ink backdrop-blur">
-          {fleetLabel(tour.fleetVehicle)}
-        </span>
       </div>
 
-      <div className="flex flex-1 flex-col gap-3 p-4">
-        <div>
-          <h3 className="line-clamp-1 text-base font-bold text-ink">{tour.title}</h3>
-          <p className="mt-1 text-xs text-ink-muted">
-            {cityLabel(tour.origin?.name)} به {cityLabel(tour.destination?.name)}
-          </p>
-        </div>
+      <div className="border-b border-black/[0.12] px-2 pb-1.5 pt-2">
+        <h3 className="mb-1.5 truncate text-[22px] font-light leading-[34px] text-black">
+          {tour.title}
+        </h3>
+        <p className="mb-1.5 truncate text-[15px] font-light text-[#282828]/70">{meta}</p>
+      </div>
 
-        <p className="text-xs text-ink-muted">
-          {formatTourDate(tour.startDate)} — {formatTourDate(tour.endDate)}
+      <div className="flex items-center justify-between px-2 py-2">
+        <Link
+          href={`/tours/${tour.id}`}
+          className="inline-flex h-[25px] w-16 items-center justify-center rounded bg-brand text-[15px] font-light tracking-wide text-white"
+        >
+          رزرو
+        </Link>
+        <p className="text-xs font-normal text-black">
+          <span className="ml-1 text-base text-[#009eca]">
+            {tour.price.toLocaleString('fa-IR')}
+          </span>
+          تومان
         </p>
-
-        {typeof tour.availableSeats === 'number' ? (
-          <p className="text-xs text-ink-muted">
-            ظرفیت باقی‌مانده:{' '}
-            <span className="font-medium text-ink">
-              {tour.availableSeats.toLocaleString('fa-IR')} نفر
-            </span>
-          </p>
-        ) : null}
-
-        <div className="mt-auto flex items-center justify-between gap-3 border-t border-gray-50 pt-3">
-          <div>
-            <p className="text-[11px] text-ink-muted">شروع از</p>
-            <p className="text-sm font-bold text-brand">
-              {tour.price.toLocaleString('fa-IR')} تومان
-            </p>
-          </div>
-          <Link href={`/tours/${tour.id}`} className="btn-primary px-3 py-2 text-xs">
-            رزرو و جزئیات
-          </Link>
-        </div>
       </div>
     </article>
   );

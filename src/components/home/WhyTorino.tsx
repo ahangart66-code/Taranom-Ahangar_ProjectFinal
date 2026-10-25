@@ -1,43 +1,27 @@
-const items = [
-  {
-    title: 'بصرفه بودن',
-    text: 'قیمت‌های شفاف و رقابتی برای تورهای داخلی و خارجی.',
-  },
-  {
-    title: 'پشتیبانی حرفه‌ای',
-    text: 'همراهی از انتخاب تور تا لحظه بازگشت از سفر.',
-  },
-  {
-    title: 'رضایت مسافران',
-    text: 'تجربه واقعی کاربران تورینو در مسیرهای متنوع.',
-  },
-];
+import { WhySlider } from '@/components/home/WhySlider';
 
 export function WhyTorino() {
   return (
-    <section className="border-y border-gray-100 bg-[#f7fbf8]">
-      <div className="container-app py-12 sm:py-16">
-        <div className="mx-auto mb-8 max-w-2xl text-center">
-          <h2 className="text-xl font-bold text-ink sm:text-2xl">چرا تورینو؟</h2>
-          <p className="mt-2 text-sm text-ink-muted">
-            سه دلیل ساده برای اینکه برنامه‌ریزی سفرت را به تورینو بسپاری.
+    <section id="why-torino" className="container-app scroll-mt-24 mt-16 lg:mt-[102px]">
+      <div className="flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:justify-between">
+        <article className="w-full max-w-[517px] lg:pt-6">
+          <div className="mb-6 flex items-center gap-4">
+            <span className="inline-flex h-[68px] w-[59px] shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-[#28A745] to-[#10411B]">
+              <img src="/images/why-icon.png" alt="" className="h-7 w-4" />
+            </span>
+            <h2 className="text-3xl font-extrabold text-ink sm:text-[40px]">
+              چرا <span className="text-brand">تورینو</span> ؟
+            </h2>
+          </div>
+          <h3 className="mb-4 text-xl font-medium text-ink sm:text-2xl">تور طبیعت گردی و تاریخی</h3>
+          <p className="text-justify text-base font-light leading-[2.2] text-ink sm:text-xl">
+            اگر دوست داشته باشید که یک جاذبه طبیعی را از نزدیک ببینید و در دل طبیعت چادر بزنید یا در
+            یک اقامتگاه بوم گردی اتاق بگیرید، باید تورهای طبیعت‌گردی را خریداری کنید. اما اگر بخواهید
+            از جاذبه‌های گردشگری و آثار تاریخی یک مقصد خاص بازدید کنید، می‌توانید تورهای فرهنگی و
+            تاریخی را خریداری کنید.
           </p>
-        </div>
-
-        <div className="grid gap-4 sm:grid-cols-3">
-          {items.map((item, index) => (
-            <article
-              key={item.title}
-              className="rounded-2xl border border-white bg-white p-5 shadow-soft"
-            >
-              <span className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-brand-light text-sm font-bold text-brand">
-                {(index + 1).toLocaleString('fa-IR')}
-              </span>
-              <h3 className="text-base font-bold text-ink">{item.title}</h3>
-              <p className="mt-2 text-sm leading-7 text-ink-muted">{item.text}</p>
-            </article>
-          ))}
-        </div>
+        </article>
+        <WhySlider />
       </div>
     </section>
   );

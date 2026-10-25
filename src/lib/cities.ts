@@ -33,6 +33,7 @@ const FLEET_FA: Record<string, string> = {
   suv: 'شاسی‌بلند',
   airplane: 'هواپیما',
   ship: 'کشتی',
+  train: 'قطار',
 };
 
 export function fleetLabel(vehicle?: string): string {

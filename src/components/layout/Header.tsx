@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { LoginModal } from '@/components/auth/LoginModal';
 import { useAuth } from '@/context/AuthContext';
@@ -8,12 +9,13 @@ import { getUserDisplayName } from '@/types/auth';
 
 const navItems = [
   { href: '/', label: 'صفحه اصلی' },
-  { href: '/#tours', label: 'تورهای گردشگری' },
+  { href: '/#tours', label: 'خدمات گردشگری' },
   { href: '/about', label: 'درباره ما' },
   { href: '/contact', label: 'تماس با ما' },
 ];
 
 export function Header() {
+  const pathname = usePathname();
   const { user, isHydrated, logout, isAuthenticated } = useAuth();
   const [loginOpen, setLoginOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -22,79 +24,102 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-gray-100 bg-white/95 backdrop-blur">
-        <div className="container-app flex h-16 items-center justify-between gap-4">
-          <Link href="/" className="text-xl font-bold text-brand">
-            Torin<span className="text-ink">o</span>
-          </Link>
+      <header className="sticky top-0 z-40 bg-white shadow-[0_1px_4px_rgba(0,0,0,0.16)]">
+        <div className="container-app flex items-center justify-between py-[15px]">
+          <div className="flex items-center">
+            <button
+              type="button"
+              className="me-3 inline-flex h-10 w-10 items-center justify-center rounded-lg border border-black/10 lg:hidden"
+              onClick={() => setMenuOpen((prev) => !prev)}
+              aria-label="منو"
+            >
+              <span className="flex flex-col gap-1">
+                <span className="block h-0.5 w-4 bg-ink" />
+                <span className="block h-0.5 w-4 bg-ink" />
+                <span className="block h-0.5 w-4 bg-ink" />
+              </span>
+            </button>
 
-          <nav className="hidden items-center gap-6 md:flex">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-sm text-ink-muted transition hover:text-brand"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
+            <Link href="/" className="shrink-0">
+              <img src="/images/logo.png" alt="تورینو" className="h-11 w-auto" />
+            </Link>
+
+            <nav className="mr-6 hidden items-center gap-6 lg:flex xl:mr-[84px] xl:w-[499px] xl:justify-between xl:gap-0">
+              {navItems.map((item) => {
+                const active = item.href === '/' ? pathname === '/' : pathname === item.href;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`text-base transition hover:text-brand ${
+                      active ? 'text-brand' : 'text-ink'
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
 
           <div className="flex items-center gap-2">
             {!isHydrated ? (
-              <div className="h-10 w-24 animate-pulse rounded-xl bg-gray-100" />
+              <div className="h-11 w-[166px] animate-pulse rounded-lg bg-gray-100" />
             ) : isAuthenticated ? (
               <div className="flex items-center gap-2">
                 <Link
                   href="/profile"
-                  className="rounded-xl border border-brand/30 px-3 py-2 text-sm font-medium text-brand"
+                  className="inline-flex h-11 items-center justify-center gap-1 rounded-lg border-2 border-brand bg-white px-3 text-base font-medium text-brand"
                 >
-                  {displayName}
+                  <img src="/images/user.png" alt="" className="h-6 w-6" />
+                  <span className="max-w-[9rem] truncate">{displayName}</span>
                 </Link>
                 <button
                   type="button"
                   onClick={logout}
-                  className="hidden rounded-xl px-3 py-2 text-sm text-ink-muted hover:bg-gray-50 sm:inline-flex"
+                  className="hidden text-sm text-ink-muted hover:text-red-600 sm:inline"
                 >
                   خروج
                 </button>
               </div>
             ) : (
-              <button
-                type="button"
-                className="btn-primary"
-                onClick={() => setLoginOpen(true)}
-              >
-                ورود
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={() => setLoginOpen(true)}
+                  className="hidden h-11 w-[166px] items-center justify-center gap-1 rounded-lg border-2 border-brand bg-white text-lg font-medium text-brand sm:inline-flex"
+                >
+                  <img src="/images/user.png" alt="" className="h-6 w-6" />
+                  <span>ورود | ثبت نام</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLoginOpen(true)}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-brand sm:hidden"
+                  aria-label="ورود | ثبت نام"
+                >
+                  <img src="/images/user.png" alt="" className="h-6 w-6" />
+                </button>
+              </>
             )}
-
-            <button
-              type="button"
-              className="rounded-lg p-2 text-ink md:hidden"
-              onClick={() => setMenuOpen((prev) => !prev)}
-              aria-label="منو"
-            >
-              ☰
-            </button>
           </div>
         </div>
 
         {menuOpen ? (
-          <div className="border-t border-gray-100 md:hidden">
-            <nav className="container-app flex flex-col gap-2 py-3">
+          <nav className="border-t border-black/5 md:hidden">
+            <div className="container-app flex flex-col py-2">
               {navItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="rounded-lg px-2 py-2 text-sm text-ink-muted hover:bg-brand-light hover:text-brand"
+                  className="rounded-lg px-2 py-2.5 text-sm text-ink hover:bg-[#f4f4f4] hover:text-brand"
                   onClick={() => setMenuOpen(false)}
                 >
                   {item.label}
                 </Link>
               ))}
-            </nav>
-          </div>
+            </div>
+          </nav>
         ) : null}
       </header>
 
