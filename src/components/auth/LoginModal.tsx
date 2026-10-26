@@ -13,11 +13,12 @@ import { mobileSchema, type MobileFormValues } from '@/schemas/auth';
 type LoginModalProps = {
   open: boolean;
   onClose: () => void;
+  onAuthenticated?: () => void;
 };
 
 type Step = 'mobile' | 'otp';
 
-export function LoginModal({ open, onClose }: LoginModalProps) {
+export function LoginModal({ open, onClose, onAuthenticated }: LoginModalProps) {
   const { requestOtp, loginWithOtp } = useAuth();
   const [step, setStep] = useState<Step>('mobile');
   const [mobile, setMobile] = useState('');
@@ -87,6 +88,7 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
       setIsSubmitting(true);
       await loginWithOtp(mobile, normalizedOtp);
       toast.success('ورود با موفقیت انجام شد');
+      onAuthenticated?.();
       onClose();
     } catch (error: unknown) {
       const message =

@@ -14,7 +14,7 @@ export type Tour = {
   fleetVehicle?: string;
   availableSeats?: number;
   capacity?: number;
-  insurance?: boolean;
+  insurance?: boolean | string;
   options?: string[];
   image?: string;
 };

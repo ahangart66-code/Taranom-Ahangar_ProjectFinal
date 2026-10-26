@@ -17,6 +17,18 @@ export function formatTourDate(iso?: string): string {
   }).format(date);
 }
 
+/** Detail heading from the tour page: «۵ روز و ۴ شب». Inclusive of both dates. */
+export function tourStayLabel(startIso?: string, endIso?: string): string {
+  if (!startIso || !endIso) return '—';
+  const start = new Date(startIso);
+  const end = new Date(endIso);
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return '—';
+
+  const days = Math.max(1, Math.round((end.getTime() - start.getTime()) / 86_400_000) + 1);
+  const nights = Math.max(0, days - 1);
+  return `${days.toLocaleString('fa-IR')} روز و ${nights.toLocaleString('fa-IR')} شب`;
+}
+
 /** Card line from the homepage design: «مهر ماه . ۳ روزه - اتوبوس». */
 export function tourCardMeta(startIso?: string, endIso?: string, fleet?: string): string {
   if (!startIso) return '—';
