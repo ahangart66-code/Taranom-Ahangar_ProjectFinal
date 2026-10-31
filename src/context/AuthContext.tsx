@@ -13,6 +13,7 @@ import { checkOtp, sendOtp } from '@/services/auth';
 import {
   clearAuthSession,
   getAccessToken,
+  getRefreshToken,
   getStoredUser,
   saveAuthSession,
 } from '@/lib/storage';
@@ -25,7 +26,7 @@ type AuthContextValue = {
   loginWithOtp: (mobile: string, code: string) => Promise<void>;
   requestOtp: (mobile: string) => Promise<{ message: string; code?: string }>;
   logout: () => void;
-  setUser: (user: AuthUser | null) => void;
+  updateUser: (user: AuthUser) => void;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -62,6 +63,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   }, []);
 
+  const updateUser = useCallback((next: AuthUser) => {
+    setUser(next);
+    const accessToken = getAccessToken();
+    const refreshToken = getRefreshToken();
+    if (!accessToken || !refreshToken) return;
+    saveAuthSession({ accessToken, refreshToken, user: next });
+  }, []);
+
   const value = useMemo(
     () => ({
       user,
@@ -70,9 +79,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       loginWithOtp,
       requestOtp,
       logout,
-      setUser,
+      updateUser,
     }),
-    [user, isHydrated, loginWithOtp, requestOtp, logout],
+    [user, isHydrated, loginWithOtp, requestOtp, logout, updateUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

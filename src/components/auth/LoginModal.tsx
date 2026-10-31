@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import OtpInput from 'react18-input-otp';
@@ -24,6 +24,7 @@ export function LoginModal({ open, onClose, onAuthenticated }: LoginModalProps) 
   const [mobile, setMobile] = useState('');
   const [otp, setOtp] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const codeToastId = useRef<string | null>(null);
 
   const {
     register,
@@ -65,7 +66,8 @@ export function LoginModal({ open, onClose, onAuthenticated }: LoginModalProps) 
       setStep('otp');
       toast.success(res.message || 'کد تأیید ارسال شد');
       if (res.code) {
-        toast(`کد تست: ${res.code}`, { icon: '🔑' });
+        if (codeToastId.current) toast.dismiss(codeToastId.current);
+        codeToastId.current = toast(`کد تست: ${res.code}`, { icon: '🔑', duration: 60_000 });
       }
     } catch (error: unknown) {
       const message =
@@ -87,6 +89,10 @@ export function LoginModal({ open, onClose, onAuthenticated }: LoginModalProps) 
     try {
       setIsSubmitting(true);
       await loginWithOtp(mobile, normalizedOtp);
+      if (codeToastId.current) {
+        toast.dismiss(codeToastId.current);
+        codeToastId.current = null;
+      }
       toast.success('ورود با موفقیت انجام شد');
       onAuthenticated?.();
       onClose();

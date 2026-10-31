@@ -1,9 +1,11 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { LoginModal } from '@/components/auth/LoginModal';
 import { useAuth } from '@/context/AuthContext';
+import { apiErrorMessage } from '@/lib/apiError';
 import { addToBasket } from '@/services/basket';
 
 type ReserveButtonProps = {
@@ -11,13 +13,8 @@ type ReserveButtonProps = {
   availableSeats?: number;
 };
 
-function errorMessage(error: unknown, fallback: string) {
-  const message = (error as { response?: { data?: { message?: string } } })?.response?.data
-    ?.message;
-  return message || fallback;
-}
-
 export function ReserveButton({ tourId, availableSeats }: ReserveButtonProps) {
+  const router = useRouter();
   const { isAuthenticated, isHydrated } = useAuth();
   const [loginOpen, setLoginOpen] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -28,13 +25,14 @@ export function ReserveButton({ tourId, availableSeats }: ReserveButtonProps) {
     try {
       const result = await addToBasket(tourId);
       toast.success(result.message || 'تور به سبد خرید اضافه شد');
+      router.push('/checkout');
     } catch (error) {
       const status = (error as { response?: { status?: number } })?.response?.status;
       if (status === 401 || status === 403) {
         setLoginOpen(true);
         return;
       }
-      toast.error(errorMessage(error, 'افزودن تور به سبد خرید انجام نشد'));
+      toast.error(apiErrorMessage(error, 'افزودن تور به سبد خرید انجام نشد'));
     } finally {
       setBusy(false);
     }

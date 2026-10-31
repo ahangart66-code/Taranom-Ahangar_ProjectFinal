@@ -6,6 +6,21 @@ export function toApiDate(date: Date): string {
   return `${year}-${month}-${day}`;
 }
 
+/** Parse YYYY-MM-DD as a local calendar date, without a UTC shift. */
+export function parseIsoDate(iso?: string): Date | null {
+  if (!iso) return null;
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso);
+  if (!match) return null;
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const date = new Date(year, month - 1, day);
+  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
+    return null;
+  }
+  return date;
+}
+
 export function formatTourDate(iso?: string): string {
   if (!iso) return '—';
   const date = new Date(iso);
