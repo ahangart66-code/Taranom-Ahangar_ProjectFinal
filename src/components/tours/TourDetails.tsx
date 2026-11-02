@@ -1,6 +1,7 @@
 import { ReserveButton } from '@/components/tours/ReserveButton';
 import { cityLabel, fleetLabel } from '@/lib/cities';
 import { formatTourDate, tourStayLabel } from '@/lib/dates';
+import { tourImageSrc } from '@/lib/media';
 import type { Tour } from '@/types/tour';
 
 const highlights = [
@@ -110,7 +111,7 @@ export function TourDetails({ tour }: { tour: Tour }) {
           <div className="flex flex-col gap-5 lg:flex-row lg:items-start">
             <div className="h-[210px] overflow-hidden rounded-xl bg-[#e7f2ec] sm:h-[230px] lg:h-[240px] lg:w-[397px] lg:shrink-0">
               {tour.image ? (
-                <img src={tour.image} alt={tour.title} className="h-full w-full object-cover" />
+                <img src={tourImageSrc(tour.image)} alt={tour.title} className="h-full w-full object-cover" />
               ) : (
                 <div className="flex h-full items-center justify-center text-sm text-brand">تورینو</div>
               )}
@@ -128,6 +129,19 @@ export function TourDetails({ tour }: { tour: Tour }) {
                   </li>
                 ))}
               </ul>
+
+              {tour.options && tour.options.length > 0 ? (
+                <ul className="mt-4 flex flex-wrap gap-2">
+                  {tour.options.map((option) => (
+                    <li
+                      key={option}
+                      className="rounded-full bg-[#e7f2ec] px-3 py-1 text-sm text-brand"
+                    >
+                      {option}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
 
               <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-black">

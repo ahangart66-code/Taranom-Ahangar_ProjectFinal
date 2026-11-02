@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { fleetLabel } from '@/lib/cities';
 import { tourCardMeta } from '@/lib/dates';
+import { tourImageSrc } from '@/lib/media';
 import type { Tour } from '@/types/tour';
 
 type TourCardProps = {
@@ -14,7 +15,7 @@ export function TourCard({ tour }: TourCardProps) {
     <article className="overflow-hidden rounded-[10px] border border-black/[0.12] bg-white shadow-[0_0_2px_rgba(0,0,0,0.25)]">
       <div className="h-[159px] bg-[#e7f2ec]">
         {tour.image ? (
-          <img src={tour.image} alt={tour.title} className="h-full w-full object-cover" />
+          <img src={tourImageSrc(tour.image)} alt={tour.title} className="h-full w-full object-cover" />
         ) : (
           <div className="flex h-full items-center justify-center text-sm text-brand">تورینو</div>
         )}

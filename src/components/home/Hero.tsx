@@ -2,11 +2,12 @@ import { TourSearch } from '@/components/home/TourSearch';
 import type { TourFilters } from '@/types/tour';
 
 type HeroProps = {
+  initialFilters: TourFilters;
   onSearch: (filters: TourFilters) => void;
   isFetching?: boolean;
 };
 
-export function Hero({ onSearch, isFetching }: HeroProps) {
+export function Hero({ initialFilters, onSearch, isFetching }: HeroProps) {
   return (
     <section>
       <img
@@ -19,7 +20,7 @@ export function Hero({ onSearch, isFetching }: HeroProps) {
           <span className="text-brand">تورینو </span>
           برگزار کننده بهترین تور های داخلی و خارجی
         </h1>
-        <TourSearch onSearch={onSearch} isFetching={isFetching} />
+        <TourSearch initialFilters={initialFilters} onSearch={onSearch} isFetching={isFetching} />
       </div>
     </section>
   );
