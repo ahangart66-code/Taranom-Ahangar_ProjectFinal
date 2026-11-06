@@ -8,3 +8,8 @@ export function toEnglishDigits(value: string): string {
 export function normalizeMobile(value: string): string {
   return toEnglishDigits(value).replace(/\D/g, '');
 }
+
+/** Show a phone number with Persian digits. */
+export function toPersianDigits(value: string): string {
+  return value.replace(/\d/g, (digit) => '۰۱۲۳۴۵۶۷۸۹'[Number(digit)]);
+}

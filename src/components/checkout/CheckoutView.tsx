@@ -16,6 +16,7 @@ import { apiErrorMessage } from '@/lib/apiError';
 import { cityLabel, fleetLabel } from '@/lib/cities';
 import { formatTourDate, tourStayLabel } from '@/lib/dates';
 import { tourImageSrc } from '@/lib/media';
+import { CheckoutSkeleton } from '@/components/ui/skeletons';
 import { checkoutSchema, type CheckoutFormValues } from '@/schemas/checkout';
 import { getBasket } from '@/services/basket';
 import { createOrder } from '@/services/order';
@@ -54,6 +55,8 @@ export function CheckoutView() {
       setPurchased(true);
       toast.success(result.message || 'تور با موفقیت خریداری شد');
       void queryClient.invalidateQueries({ queryKey: ['basket'] });
+      void queryClient.invalidateQueries({ queryKey: ['user-tours'] });
+      void queryClient.invalidateQueries({ queryKey: ['transactions'] });
     },
     onError: (error) => {
       toast.error(apiErrorMessage(error, 'ثبت سفارش انجام نشد'));
@@ -70,13 +73,7 @@ export function CheckoutView() {
   });
 
   if (!isHydrated || (isAuthenticated && basketQuery.isLoading)) {
-    return (
-      <div className="bg-[#f5f5f5] py-8">
-        <div className="container-app">
-          <div className="h-64 animate-pulse rounded-2xl bg-white" />
-        </div>
-      </div>
-    );
+    return <CheckoutSkeleton />;
   }
 
   if (!isAuthenticated) {
@@ -115,9 +112,14 @@ export function CheckoutView() {
           <section className="mx-auto max-w-lg rounded-2xl bg-white px-6 py-10 shadow-[0_1px_6px_rgba(0,0,0,0.06)]">
             <h1 className="text-xl font-bold text-ink">تور با موفقیت خریداری شد</h1>
             <p className="mt-2 text-sm text-ink-muted">سفارش شما ثبت شد.</p>
-            <Link href="/" className="btn-primary mt-6">
-              بازگشت به صفحه اصلی
-            </Link>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+              <Link href="/profile/tours" className="btn-primary">
+                تورهای من
+              </Link>
+              <Link href="/" className="text-sm text-brand">
+                بازگشت به صفحه اصلی
+              </Link>
+            </div>
           </section>
         </div>
       </div>

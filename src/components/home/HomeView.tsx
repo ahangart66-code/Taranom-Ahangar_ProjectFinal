@@ -71,7 +71,7 @@ export function HomeView({ catalog, serverTours, serverFilters, serverError }: H
       <Hero initialFilters={serverFilters} onSearch={handleSearch} isFetching={isFetching} />
       <TourListSection
         tours={tours}
-        isLoading={isLoading}
+        isLoading={isLoading || isFetching}
         isError={isError}
         onClear={handleClear}
         onRetry={handleRetry}

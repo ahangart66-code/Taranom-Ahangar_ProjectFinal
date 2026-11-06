@@ -38,6 +38,14 @@ export type UpdateProfileResponse = {
   user?: UserProfile;
 };
 
+export type Transaction = {
+  id: string;
+  userId?: string;
+  amount: number;
+  type: string;
+  createdAt: string;
+};
+
 export type OrderPayload = {
   fullName: string;
   nationalCode: string;

@@ -21,6 +21,19 @@ export function parseIsoDate(iso?: string): Date | null {
   return date;
 }
 
+export function formatDateTime(iso?: string): string {
+  if (!iso) return '—';
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return '—';
+  return new Intl.DateTimeFormat('fa-IR', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date);
+}
+
 export function formatTourDate(iso?: string): string {
   if (!iso) return '—';
   const date = new Date(iso);

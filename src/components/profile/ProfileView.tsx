@@ -14,6 +14,7 @@ import { useAuth } from '@/context/AuthContext';
 import { apiErrorMessage } from '@/lib/apiError';
 import { profileSchema, type ProfileFormValues } from '@/schemas/profile';
 import { getProfile, updateProfile } from '@/services/user';
+import { ProfileFormSkeleton } from '@/components/ui/skeletons';
 import type { AuthUser } from '@/types/auth';
 import type { UpdateProfilePayload, UserProfile } from '@/types/user';
 
@@ -128,7 +129,7 @@ export function ProfileView() {
   });
 
   if (!isHydrated || (isAuthenticated && profileQuery.isLoading)) {
-    return <div className="h-64 animate-pulse rounded-xl bg-gray-100" />;
+    return <ProfileFormSkeleton />;
   }
 
   if (!isAuthenticated) {

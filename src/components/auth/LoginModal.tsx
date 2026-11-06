@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import OtpInput from 'react18-input-otp';
 import toast from 'react-hot-toast';
 import { FormField } from '@/components/ui/FormField';
+import { LoginStepSkeleton } from '@/components/ui/skeletons';
 import { useAuth } from '@/context/AuthContext';
 import { normalizeMobile, toEnglishDigits } from '@/lib/digits';
 import { mobileSchema, type MobileFormValues } from '@/schemas/auth';
@@ -133,7 +134,9 @@ export function LoginModal({ open, onClose, onAuthenticated }: LoginModalProps) 
           </button>
         </div>
 
-        {step === 'mobile' ? (
+        {isSubmitting ? (
+          <LoginStepSkeleton step={step} />
+        ) : step === 'mobile' ? (
           <form onSubmit={onSendOtp} className="space-y-4">
             <FormField
               id="mobile"

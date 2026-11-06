@@ -5,6 +5,8 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useId, useRef, useState } from 'react';
 import { LoginModal } from '@/components/auth/LoginModal';
 import { useAuth } from '@/context/AuthContext';
+import { toPersianDigits } from '@/lib/digits';
+import { AccountChipSkeleton } from '@/components/ui/skeletons';
 import { getUserDisplayName } from '@/types/auth';
 
 const navItems = [
@@ -105,7 +107,7 @@ export function Header() {
 
           <div className="flex items-center gap-2">
             {!isHydrated ? (
-              <div className="h-11 w-[166px] animate-pulse rounded-lg bg-gray-100" />
+              <AccountChipSkeleton />
             ) : isAuthenticated ? (
               <div className="flex h-11 items-center gap-3" dir="ltr">
                 <div className="relative flex" ref={accountRef}>
@@ -164,7 +166,7 @@ export function Header() {
                   ) : null}
                 </div>
                 <span dir="ltr" className="text-base text-brand">
-                  ۰۹۲۲۴۵۲۶۸۴۷
+                  {toPersianDigits(user?.mobile || displayName)}
                 </span>
                 <img src="/images/user.png" alt="" className="h-6 w-6" />
               </div>
@@ -192,7 +194,7 @@ export function Header() {
         </div>
 
         {menuOpen ? (
-          <nav className="border-t border-black/5 md:hidden">
+          <nav className="border-t border-black/5 lg:hidden">
             <div className="container-app flex flex-col py-2">
               {navItems.map((item) => (
                 <Link
@@ -204,6 +206,18 @@ export function Header() {
                   {item.label}
                 </Link>
               ))}
+              {isAuthenticated
+                ? accountLinks.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="rounded-lg px-2 py-2.5 text-sm text-ink hover:bg-[#f4f4f4] hover:text-brand"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  ))
+                : null}
             </div>
           </nav>
         ) : null}

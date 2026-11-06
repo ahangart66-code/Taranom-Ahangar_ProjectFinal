@@ -1,6 +1,7 @@
 'use client';
 
 import { TourCard } from '@/components/tours/TourCard';
+import { TourListSkeleton } from '@/components/ui/skeletons';
 import type { Tour } from '@/types/tour';
 
 type TourListSectionProps = {
@@ -11,22 +12,12 @@ type TourListSectionProps = {
   onRetry: () => void;
 };
 
-function TourSkeleton() {
-  return <div className="h-[250px] animate-pulse rounded-[10px] border border-black/10 bg-gray-50" />;
-}
-
 export function TourListSection({ tours, isLoading, isError, onClear, onRetry }: TourListSectionProps) {
   return (
     <section id="tours" className="container-app scroll-mt-24 pb-4 pt-2">
       <h2 className="mb-3 text-2xl font-normal text-black sm:text-[32px]">همه تور ها</h2>
 
-      {isLoading ? (
-        <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {[1, 2, 3, 4].map((item) => (
-            <TourSkeleton key={item} />
-          ))}
-        </div>
-      ) : null}
+      {isLoading ? <TourListSkeleton /> : null}
 
       {isError ? (
         <div className="rounded-[10px] border border-red-100 bg-red-50 px-5 py-8 text-center">
