@@ -1,40 +1,50 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { LoginModal } from '@/components/auth/LoginModal';
 import { useAuth } from '@/context/AuthContext';
 import { apiErrorMessage } from '@/lib/apiError';
 import { addToBasket } from '@/services/basket';
+import type { Tour } from '@/types/tour';
 
 type ReserveButtonProps = {
   tourId: string;
   availableSeats?: number;
+  tour?: Tour;
 };
 
-export function ReserveButton({ tourId, availableSeats }: ReserveButtonProps) {
+export function ReserveButton({ tourId, availableSeats, tour }: ReserveButtonProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { isAuthenticated, isHydrated } = useAuth();
   const [loginOpen, setLoginOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const soldOut = availableSeats === 0;
 
+  useEffect(() => {
+    router.prefetch('/checkout');
+  }, [router]);
+
   const placeInBasket = async () => {
     setBusy(true);
     try {
       const result = await addToBasket(tourId);
+      if (tour) {
+        queryClient.setQueryData(['basket'], tour);
+      }
       toast.success(result.message || 'تور به سبد خرید اضافه شد');
       router.push('/checkout');
     } catch (error) {
+      setBusy(false);
       const status = (error as { response?: { status?: number } })?.response?.status;
       if (status === 401 || status === 403) {
         setLoginOpen(true);
         return;
       }
       toast.error(apiErrorMessage(error, 'افزودن تور به سبد خرید انجام نشد'));
-    } finally {
-      setBusy(false);
     }
   };
 

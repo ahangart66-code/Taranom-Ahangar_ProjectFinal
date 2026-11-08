@@ -72,7 +72,7 @@ export function CheckoutView() {
     });
   });
 
-  if (!isHydrated || (isAuthenticated && basketQuery.isLoading)) {
+  if (!isHydrated || (isAuthenticated && basketQuery.isLoading && basketQuery.data == null)) {
     return <CheckoutSkeleton />;
   }
 
@@ -167,6 +167,12 @@ export function CheckoutView() {
                 {formatTourDate(tour.startDate)} تا {formatTourDate(tour.endDate)} ·{' '}
                 {fleetLabel(tour.fleetVehicle)}
               </p>
+              <Link
+                href="/profile/tours"
+                className="mt-4 inline-flex h-11 items-center justify-center rounded-[10px] border border-brand px-5 text-[15px] font-medium text-brand"
+              >
+                برو به تورهای من
+              </Link>
             </div>
           </div>
         </section>

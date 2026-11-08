@@ -150,7 +150,7 @@ export function TourDetails({ tour }: { tour: Tour }) {
                   </span>
                   تومان
                 </p>
-                <ReserveButton tourId={tour.id} availableSeats={tour.availableSeats} />
+                <ReserveButton tour={tour} tourId={tour.id} availableSeats={tour.availableSeats} />
               </div>
             </div>
           </div>
