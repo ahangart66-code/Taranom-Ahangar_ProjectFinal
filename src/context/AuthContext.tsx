@@ -9,6 +9,8 @@ import {
   useState,
   type ReactNode,
 } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { SESSION_EXPIRED_EVENT } from '@/lib/constants';
 import { checkOtp, sendOtp } from '@/services/auth';
 import {
   clearAuthSession,
@@ -34,6 +36,7 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const token = getAccessToken();
@@ -44,24 +47,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsHydrated(true);
   }, []);
 
+  useEffect(() => {
+    const onSessionExpired = () => {
+      setUser(null);
+      queryClient.clear();
+    };
+    window.addEventListener(SESSION_EXPIRED_EVENT, onSessionExpired);
+    return () => window.removeEventListener(SESSION_EXPIRED_EVENT, onSessionExpired);
+  }, [queryClient]);
+
   const requestOtp = useCallback(async (mobile: string) => {
     return sendOtp(mobile);
   }, []);
 
   const loginWithOtp = useCallback(async (mobile: string, code: string) => {
     const data = await checkOtp(mobile, code);
+    queryClient.clear();
     saveAuthSession({
       accessToken: data.accessToken,
       refreshToken: data.refreshToken,
       user: data.user,
     });
     setUser(data.user);
-  }, []);
+  }, [queryClient]);
 
   const logout = useCallback(() => {
     clearAuthSession();
     setUser(null);
-  }, []);
+    queryClient.clear();
+  }, [queryClient]);
 
   const updateUser = useCallback((next: AuthUser) => {
     setUser(next);

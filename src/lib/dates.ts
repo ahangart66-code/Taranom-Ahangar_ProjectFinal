@@ -65,7 +65,7 @@ export function tourCardMeta(startIso?: string, endIso?: string, fleet?: string)
 
   const end = endIso ? new Date(endIso) : start;
   const endTime = Number.isNaN(end.getTime()) ? start.getTime() : end.getTime();
-  const days = Math.max(1, Math.round((endTime - start.getTime()) / 86_400_000));
+  const days = Math.max(1, Math.round((endTime - start.getTime()) / 86_400_000) + 1);
   const month = new Intl.DateTimeFormat('fa-IR', { month: 'long' }).format(start);
 
   return `${month} ماه . ${days.toLocaleString('fa-IR')} روزه - ${fleet || 'حمل‌ونقل'}`;

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_URL, STORAGE_KEYS } from '@/lib/constants';
+import { API_URL, SESSION_EXPIRED_EVENT, STORAGE_KEYS } from '@/lib/constants';
 import {
   clearAuthSession,
   getAccessToken,
@@ -48,6 +48,9 @@ async function refreshAccessToken(): Promise<string | null> {
     return data.accessToken;
   } catch {
     clearAuthSession();
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event(SESSION_EXPIRED_EVENT));
+    }
     return null;
   }
 }

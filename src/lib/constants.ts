@@ -6,3 +6,5 @@ export const STORAGE_KEYS = {
   refreshToken: 'torino_refresh_token',
   user: 'torino_user',
 } as const;
+
+export const SESSION_EXPIRED_EVENT = 'torino:session-expired';

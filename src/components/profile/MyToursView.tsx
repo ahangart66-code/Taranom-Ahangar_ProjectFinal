@@ -12,12 +12,22 @@ import { getUserTours } from '@/services/user';
 import { MyToursSkeleton } from '@/components/ui/skeletons';
 import type { Tour } from '@/types/tour';
 
-function isFinished(tour: Tour) {
-  const end = new Date(tour.endDate);
-  if (Number.isNaN(end.getTime())) return false;
+type TourStatus = 'upcoming' | 'ongoing' | 'finished';
+
+const statusLabel: Record<TourStatus, string> = {
+  upcoming: 'در انتظار برگزاری',
+  ongoing: 'در حال برگزاری',
+  finished: 'به اتمام رسیده',
+};
+
+function tourStatus(tour: Tour): TourStatus {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  return end < today;
+  const start = new Date(tour.startDate);
+  const end = new Date(tour.endDate);
+  if (!Number.isNaN(end.getTime()) && end < today) return 'finished';
+  if (!Number.isNaN(start.getTime()) && start > today) return 'upcoming';
+  return 'ongoing';
 }
 
 export function MyToursView() {
@@ -76,7 +86,7 @@ export function MyToursView() {
       ) : (
         <ul className="mt-6 flex flex-col gap-4">
           {tours.map((tour) => {
-            const finished = isFinished(tour);
+            const status = tourStatus(tour);
             const image = tourImageSrc(tour.image);
             return (
               <li
@@ -98,10 +108,10 @@ export function MyToursView() {
                       <h2 className="text-lg font-medium text-ink">{tour.title}</h2>
                       <span
                         className={`rounded-full px-3 py-1 text-xs ${
-                          finished ? 'bg-gray-100 text-ink-muted' : 'bg-brand-light text-brand'
+                          status === 'finished' ? 'bg-gray-100 text-ink-muted' : 'bg-brand-light text-brand'
                         }`}
                       >
-                        {finished ? 'به اتمام رسیده' : 'در حال برگزاری'}
+                        {statusLabel[status]}
                       </span>
                     </div>
                     <p className="text-sm text-ink-muted">
