@@ -1,4 +1,4 @@
-/** Format a Date to API contract: YYYY-MM-DD (Gregorian / ISO date). */
+// date to Y-M-D
 export function toApiDate(date: Date): string {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -6,7 +6,7 @@ export function toApiDate(date: Date): string {
   return `${year}-${month}-${day}`;
 }
 
-/** Parse YYYY-MM-DD as a local calendar date, without a UTC shift. */
+// Y-M-D to date
 export function parseIsoDate(iso?: string): Date | null {
   if (!iso) return null;
   const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso);
@@ -45,7 +45,7 @@ export function formatTourDate(iso?: string): string {
   }).format(date);
 }
 
-/** Detail heading from the tour page: «۵ روز و ۴ شب». Inclusive of both dates. */
+// e.g. ۵ روز و ۴ شب
 export function tourStayLabel(startIso?: string, endIso?: string): string {
   if (!startIso || !endIso) return '—';
   const start = new Date(startIso);
@@ -57,7 +57,7 @@ export function tourStayLabel(startIso?: string, endIso?: string): string {
   return `${days.toLocaleString('fa-IR')} روز و ${nights.toLocaleString('fa-IR')} شب`;
 }
 
-/** Card line from the homepage design: «مهر ماه . ۳ روزه - اتوبوس». */
+// e.g. مهر ماه . ۳ روزه - اتوبوس
 export function tourCardMeta(startIso?: string, endIso?: string, fleet?: string): string {
   if (!startIso) return '—';
   const start = new Date(startIso);

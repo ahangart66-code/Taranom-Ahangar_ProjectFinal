@@ -1,4 +1,4 @@
-/** Convert Persian/Arabic digits to Latin (0-9). */
+// persian digits to english
 export function toEnglishDigits(value: string): string {
   return value
     .replace(/[۰-۹]/g, (digit) => String(digit.charCodeAt(0) - '۰'.charCodeAt(0)))
@@ -9,7 +9,7 @@ export function normalizeMobile(value: string): string {
   return toEnglishDigits(value).replace(/\D/g, '');
 }
 
-/** Show a phone number with Persian digits. */
+// english digits to persian
 export function toPersianDigits(value: string): string {
   return value.replace(/\d/g, (digit) => '۰۱۲۳۴۵۶۷۸۹'[Number(digit)]);
 }

@@ -52,8 +52,6 @@ export function TourSearch({ initialFilters, onSearch, isFetching }: TourSearchP
   return (
     <form
       id="search"
-      method="get"
-      action="/"
       onSubmit={handleSubmit}
       className="mx-auto mb-12 mt-6 flex w-full max-w-[874px] flex-col gap-3 lg:mb-[84px] lg:mt-7 lg:h-[71px] lg:flex-row lg:items-center lg:gap-0 lg:rounded-[20px] lg:border lg:border-black/15 lg:p-[7.5px] lg:px-2.5"
     >
@@ -61,7 +59,6 @@ export function TourSearch({ initialFilters, onSearch, isFetching }: TourSearchP
         <li className={`${fieldClass} sm:w-[calc(50%-6px)] lg:w-auto`}>
           <img src="/images/location.png" alt="" className="h-5 w-5 shrink-0" />
           <select
-            name="originId"
             aria-label="مبدأ"
             className="w-full appearance-none bg-transparent text-base text-ink outline-none"
             value={originId}
@@ -79,7 +76,6 @@ export function TourSearch({ initialFilters, onSearch, isFetching }: TourSearchP
         <li className={`${fieldClass} sm:w-[calc(50%-6px)] lg:w-auto`}>
           <img src="/images/destination.png" alt="" className="h-5 w-5 shrink-0" />
           <select
-            name="destinationId"
             aria-label="مقصد"
             className="w-full appearance-none bg-transparent text-base text-ink outline-none"
             value={destinationId}
@@ -97,8 +93,6 @@ export function TourSearch({ initialFilters, onSearch, isFetching }: TourSearchP
         <li className={`${fieldClass} sm:w-full lg:w-auto`}>
           <img src="/images/calendar.png" alt="" className="h-5 w-5 shrink-0" />
           <DateRangeField value={dates} onChange={setDates} />
-          <input type="hidden" name="startDate" value={dates[0] ? toApiDate(dates[0].toDate()) : ''} />
-          <input type="hidden" name="endDate" value={dates[1] ? toApiDate(dates[1].toDate()) : ''} />
         </li>
       </ul>
 
